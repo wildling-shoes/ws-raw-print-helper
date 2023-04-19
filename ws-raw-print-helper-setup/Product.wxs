@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="ws_raw_print_helper" Language="1033" Version="1.1.2.0" Manufacturer="Wildling.Shoes" UpgradeCode="7792D092-3A2B-48AB-96CD-6B6898E262CE">
+		<Package InstallerVersion="200" 
+				 Compressed="yes" 
+				 InstallScope="perMachine" 
+				 Description="ws-raw-print-helper Installer" 
+				 Comments='Direct print for zpl files.' 
+				 Manufacturer='Wildling.Shoes' Platform='x64' />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of ws_raw_print_helper is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="ws_raw_print_helper_setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+		<Icon Id="ws_raw_print_helper_icon.exe" SourceFile="$(var.ws-raw-print-helper.TargetPath)" />
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="WildlingFolder" Name="Wildling.Shoes">
+					<Directory Id="INSTALLFOLDER" Name="ws_raw_print_helper" />
+				</Directory>
+			</Directory>
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id='MainExecutable' Guid='47220407-496E-4119-B6CF-AD54ABD4706C' Win64='yes'>
+				<File Id='ws_raw_print_helperEXE' Name="ws-raw-print-helper.exe" DiskId='1' Source='$(var.ws-raw-print-helper.ProjectDir)\bin\Release\net6.0-windows10.0.17763.0\win-x64\publish\ws-raw-print-helper.exe' KeyPath='yes'>
+					<Shortcut Id="startmenuws_raw_print_helper" Directory="ProgramMenuFolder" Name="WS Print Helper"
+						WorkingDirectory='INSTALLDIR' Icon="ws_raw_print_helper_icon.exe" IconIndex="0" Advertise="yes" />
+				</File>
+				<ProgId Id='PrintHelper.zplfile' Description='ZPL Label'>
+					<Extension Id='zpl' ContentType='application/zpl'>
+						<Verb Id='open' Command='Open' TargetFile='ws_raw_print_helperEXE' Argument='"%1"' />
+					</Extension>
+				</ProgId>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
